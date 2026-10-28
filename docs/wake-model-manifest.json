@@ -1,0 +1,24 @@
+{
+  "engine": "sherpa-onnx",
+  "version": "2.0.0",
+  "model": "sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20",
+  "license": "Apache-2.0",
+  "upstream_model_card": "https://modelscope.cn/models/pkufool/icefall-kws-zipformer-zh-en-3M-2025-12-20/resolve/master/README.md",
+  "hashes": {
+    "app/src/main/assets/wake/chinese.txt": "8bf623ed053166744f760f7e614ff56782f7e2290fb0c3423b30601e6406a37f",
+    "app/src/main/assets/wake/joiner-epoch-13-avg-2-chunk-16-left-64.int8.onnx": "190d4067b4cc20b72a42a1916e69d92052000fb7051a427ebb1bc72a69207dc1",
+    "app/src/main/assets/wake/tokens.txt": "2d3f32311f9b692b964da3c90e830258d3e78e013cb0c992dbfb15cd5a1a71b0",
+    "app/src/main/assets/wake/english.txt": "6916a17cbbfe1e7c7e2c1bf6779c9501645e1685294a2cdab6749733d5418349",
+    "app/src/main/assets/wake/decoder-epoch-13-avg-2-chunk-16-left-64.onnx": "63a22dd60f40fff082ac3e09afa507f6787da36df76ded2fbe145fa233e22c21",
+    "app/src/main/assets/wake/encoder-epoch-13-avg-2-chunk-16-left-64.int8.onnx": "408bbd740838c42d5bf6d1c5b80b3c88b616c7860b92d980328b5b068c76ae48",
+    "app/libs/sherpa-onnx-2.0.0.aar": "f0f8716982d27cb4ce695e3934018b1342d9d3d6fdb6ef1f1658fe8bad50b4fc"
+  },
+  "onnxruntimeVersion": "1.28.2",
+  "parameters": {
+    "score": 1.0,
+    "threshold": 0.25,
+    "trailingBlanks": 1,
+    "threads": 1,
+    "sampleRate": 16000
+  }
+}
