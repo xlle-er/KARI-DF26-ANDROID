@@ -1,1 +1,14 @@
-{"name":"kari-df26-android-resources","private":true,"type":"module","scripts":{"build:resources":"node scripts/build-resources.mjs","test:face":"playwright test"},"devDependencies":{"esbuild":"0.28.2","@playwright/test":"1.55.1"}}
+{
+  "name": "kari-df26-android-resources",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:resources": "node scripts/build-resources.mjs",
+    "test:face": "playwright test",
+    "build:icons": "python3 scripts/build-icons.py && node scripts/build-readme-icon.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "@playwright/test": "1.55.1"
+  }
+}

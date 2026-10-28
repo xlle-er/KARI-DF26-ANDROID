@@ -2,7 +2,7 @@
 
 > [KARI unified user guide](https://github.com/xlle-er/KARI-DF26) · New application/device identities require a fresh install and configuration. See [current validation](https://github.com/xlle-er/KARI-DF26/blob/main/docs/validation.md) for migration checks and the maintainer’s physical-test confirmation.
 <p align="center">
-  <img src="docs/icon-rounded.svg" alt="KARI icon" width="160" height="160" />
+  <img src="docs/icon-rounded.png" alt="KARI icon" width="160" height="160" />
 </p>
 <h1 align="center">KARI-DF26-ANDROID</h1>
 <p align="center">原生 Android 机器人陪伴应用 · Native Android robot companion</p>
@@ -139,7 +139,7 @@ For Ollama use `adb reverse tcp:11434 tcp:11434` and `http://127.0.0.1:11434`. T
 
 Credentials are encrypted on device using Keystore AES-GCM; ordinary settings use DataStore. No API credentials, personal provider configuration, recordings or private signing keys are shipped. Online requests and enabled audio/video go to **your selected provider** under its privacy terms. Local object detection itself does not require network access. See [PRIVACY.md](PRIVACY.md).
 
-**New Android native code, tests, build scripts and documentation are MIT licensed**, subject to the scope and exceptions in [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md). Imported eyes, web reference code, generated derivatives and the icon originate from [KARI-DF26-WEB](https://github.com/xlle-er/KARI-DF26-WEB) / its iOS project, whose upstream has not declared a license. This repository does not grant third-party rights over them; **the complete asset bundle must not be treated as MIT**. Trademarks and artwork retain their owners' rights. Models and dependencies keep their own terms; see [licenses](licenses).
+**New Android native code, tests, build scripts and documentation are MIT licensed**, subject to the scope and exceptions in [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md). Imported eyes, web reference code and their generated derivatives originate from [KARI-DF26-WEB](https://github.com/xlle-er/KARI-DF26-WEB) / its iOS project, whose upstream has not declared a license. This repository does not grant third-party rights over them; **the complete asset bundle must not be treated as MIT**. Trademarks and artwork retain their owners' rights. Models and dependencies keep their own terms; see [licenses](licenses).
 
 Remove secrets, full device identifiers, private images and conversations before filing an issue. Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
 

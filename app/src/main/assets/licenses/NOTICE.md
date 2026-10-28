@@ -11,7 +11,8 @@ New Android Kotlin code, tests, build scripts and documentation use the MIT term
 - Project material was carried forward from the maintainer’s pre-migration development snapshots. Baseline snapshot: `c61b26df3bbca6037723fca070dae5abde3b3235`; this hash refers to the private historical archive, not to this repository’s new history.
 - `FaceSource/`: original eyes, command queue, action catalog and choreography; Android host/message adaptation is recorded in the files. `android-host.css` is newly authored. `ReferenceSource/`: web personality, idle rules, tracking and relative-follow reference, snapshot 2026-10-15 including local edits.
 - Generated derivatives: `app/src/main/assets/face/`, `live-setup.json`, `scenarios.json`, `personality.json`, `idle-scenarios.json`. Derivatives retain their source's rights.
-- `icon.png` and generated launcher artwork: supplied project icon; no separate artwork or trademark license is asserted.
+- `branding/AppIcon.icon`, `icon.png` and generated launcher / README artwork: original KARI geometric K and aligned grid, approved by the maintainer on 2026-10-28. This replaces the former placeholder artwork; artwork and trademark rights remain reserved.
+- 图标已替换为维护者于 2026-10-28 确认的原创 KARI 字形与对齐格纹，图形及商标权利保留。
 - **Upstream repositories did not declare a license at publication. Their code/artwork is not relicensed here. Permission beyond the original owner's rights must be obtained from the relevant rights holder.** This is a mixed-license/source-available distribution, with the new Android implementation under MIT.
 - 上游未声明许可证；本次保留来源，不替上游或其他权利人授权。完整项目属于混合授权/源码可查看分发，新增 Android 实现采用 MIT。图标与商标权利保留。
 
