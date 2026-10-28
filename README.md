@@ -116,7 +116,7 @@ Bundled EfficientDet-Lite0 int8 runs on CPU at up to 10 Hz without network infer
 
 ### Verification status
 
-For 1.3.0, 98 logic tests, 7 Android emulator UI/model tests and 5 eye/bridge tests passed. Actual bilingual wake JNI fixtures passed; the existing EfficientDet ARM emulator limitation remains separate. Lint has zero errors, and the APK retains the previous signing certificate. The user authorized publication on 2026-10-25. This approval is not a recorded result for every physical-device, 20-turn or 30-minute scenario. See [1.3.0 features and limits](docs/features-1.3.0.md).
+The KARI build has fresh unit, lint, APK and face regression results. Physical device tests remain pending; see the central validation record. Historical results are not reused.
 
 ### Build and configuration
 
