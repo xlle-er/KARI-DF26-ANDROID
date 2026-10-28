@@ -1,0 +1,55 @@
+name: Publish verified APK
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        required: true
+        type: string
+      sha256:
+        required: true
+        type: string
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: ${{ inputs.release_tag }}
+      EXPECTED_SHA256: ${{ inputs.sha256 }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Download temporary transfer segments
+        run: |
+          mkdir -p "$RUNNER_TEMP/kari-apk"
+          cd "$RUNNER_TEMP/kari-apk"
+          gh release download "$RELEASE_TAG" --repo "$GH_REPO" --pattern 'kari-apk.part-*'
+      - name: Restore original APK and verify identity
+        run: |
+          cd "$RUNNER_TEMP/kari-apk"
+          python3 - <<'PYTHON'
+          import gzip,hashlib,os,re,shutil
+          from pathlib import Path
+          assert re.fullmatch(r'[a-f0-9]{64}',os.environ['EXPECTED_SHA256'])
+          parts=sorted(Path('.').glob('kari-apk.part-*'))
+          assert parts and [p.name for p in parts]==[f'kari-apk.part-{i:03d}' for i in range(len(parts))]
+          with open('apk.gz','wb') as out:
+              for p in parts:
+                  with p.open('rb') as src:shutil.copyfileobj(src,out)
+          target=Path('KARI-Android-1.3.0-debug.apk')
+          with gzip.open('apk.gz','rb') as src,target.open('wb') as out:shutil.copyfileobj(src,out)
+          digest=hashlib.sha256(target.read_bytes()).hexdigest()
+          assert digest==os.environ['EXPECTED_SHA256'],'APK content differs from verified local build'
+          Path('SHA256SUMS.txt').write_text(digest+'  '+target.name+'\n')
+          PYTHON
+      - name: Upload exact APK and checksum
+        run: |
+          cd "$RUNNER_TEMP/kari-apk"
+          gh release upload "$RELEASE_TAG" KARI-Android-1.3.0-debug.apk SHA256SUMS.txt --repo "$GH_REPO" --clobber
+      - name: Remove temporary segments and publish stable release
+        run: |
+          cd "$RUNNER_TEMP/kari-apk"
+          for segment in kari-apk.part-*; do
+            gh release delete-asset "$RELEASE_TAG" "$segment" --repo "$GH_REPO" --yes
+          done
+          gh release edit "$RELEASE_TAG" --repo "$GH_REPO" --draft=false --latest
