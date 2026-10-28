@@ -1,5 +1,9 @@
 # 原生架构与接口
 
+**语言 / Language:** [简体中文](#简体中文) · [English](#english)
+
+## 简体中文
+
 ## 所有权与生命周期
 
 Application 的 `KariRuntime` 持有设备、网络、协程 scope 和会话代次；AndroidViewModel 给 UI 暴露同一实例。Activity 重建只重建 UI 与眼睛视图，不重新启动会话。CameraX 绑定 ProcessLifecycleOwner；前后台判断也由 ProcessLifecycleOwner 驱动，避免旋转或权限弹窗结束采集。
@@ -54,3 +58,57 @@ Android 的宿主页用当前视口的明确像素高度设置 html/body/faceCan
 D-pad 与摇杆都处理原始触摸的释放/取消；TalkBack 方向按钮和摇杆自定义动作使用 200 ms 输入脉冲并走相同 ACK/停止逻辑。固定版本的 iOS `KariRemoteControl` / `KariRemoteView` 作为行为参考，不导入 Swift 源码。
 
 Physical speed, direction and stopping remain hardware acceptance items. Firmware ACK does not prove mechanical stopping.
+
+## English
+
+### Ownership and lifecycle
+
+The Application-owned `KariRuntime` holds device/network services, coroutine scope and session generations; AndroidViewModel exposes the same instance. Activity recreation rebuilds UI/eyes only, not the session. CameraX and foreground/background transitions use ProcessLifecycleOwner, so rotation and permission dialogs do not end capture.
+
+`SessionGate` transitions idle → starting → active / testing → stopping → idle. Startup, permissions, text requests and recovery check generations. Exit invalidates generations, cancels actions/network/media and prioritizes body stop. WebView process failure affects presentation/actions without directly destroying Live.
+
+### Data flow
+
+- AudioRecord prefers 16 kHz PCM16; 48 kHz fallback streams through 3:1 conversion with remainder samples retained. Echo cancellation depends on device support and requires measurement.
+- Live capture starts after setupComplete; heartbeat is 20 s. The application channel holds 48 sends, OkHttp backlog is bounded, and new video frames are dropped under congestion. One incoming message is at most 4 MB.
+- AudioTrack uses 24 kHz PCM16, 80 ms prebuffer, at most 200 ms per write, 600 ms scheduled and 60 s total queue. Chunked storage tracks unsigned playback-head completion, wraparound and recovery generations.
+- One CameraX Preview + ImageAnalysis serves native preview, local detection up to 10 Hz and JPEG upload up to 1 Hz. Model input is upright/unmirrored; front-preview overlays are mirrored separately.
+- `Detection(id,label,score,Box(x,y,w,h),timeMs)` uses normalized coordinates and elapsedRealtime. Following continues local IDs using same-class IoU; ambiguity invalidates the target.
+
+### Message bridge
+
+Only the main frame at `https://appassets.androidplatform.net` may message `KariNative`. External navigation, file access and remote resources are blocked; CSP disallows network connections.
+
+JS → native is `{id,kind,payload,runId}`, with ready / command / photo / scenarioDone. Native → JS is state / reply / run / cancel. Native checks operation ID, motion permission, parameters and the original scenario allowlist. The adapter resolves the original command queue only after native firmware ACK. Partial, cancelled or failed choreography is not completion.
+
+### Motion and stopping
+
+`RobotTransport.send(JSONObject)` requires a firmware ACK with the same ID; a successful GATT write only confirms transport. Notifications accumulate UTF-8 bytes until newline, bounded to 65536 bytes. GATT is serialized; chunks use negotiated MTU minus 3, defaulting to 20 bytes.
+
+MotionArbiter leases reject stale owners. Priority is manual remote > tests > explicit actions > following > idle. Stop invalidates queued generations, cancels current commands and coalesces concurrent requests. Native bounds speed, duration, ramp and servo pulses independently; it does not send raw PWM / config_update.
+
+Following uses 150 ms pulses with no historical-intent queue. Horizontal dead zone is 14%; area ratio below 0.8 moves forward and at least 0.95 stops; no reverse. A 50 ms watchdog enforces 300 ms freshness and requests stop without waiting for an ordinary ACK when tracking becomes invalid.
+
+### Language, permissions and diagnostics
+
+`L10n.t(zh,en)` declares adjacent translations; DataStore persists UI language. AI prioritizes the user's current spoken/typed language, with system/UI language only as fallback.
+
+Permissions are requested when used: microphone for speech, optional camera fallback, scanning only from the robot list. Android 12+ requests nearby devices; older systems require foreground location for scanning. There is no background location, call or camera service.
+
+Diagnostics display session, recording, actual playback buffer/route, Live/video counts, robot readiness and following. Full device addresses are used only locally for selection/aliases, never logs or exports.
+
+### UI tokens
+
+Material 3 dark colors: primary `#8DE8CB`, onPrimary `#00382B`, background `#101716`, surface `#182220`, body `#E3EEE8`. Use Material typography, 8/12/16/24 dp spacing, 16/24 dp corners and at least 48 dp controls. Controls, settings and dialogs scroll; accessibility prevents auto-hiding and text mode retains input.
+
+The host applies explicit current-viewport pixel height to html/body/faceCanvas, avoiding WebView percentage-height / containment collapse without rewriting eye styles. Entering/leaving companionship recreates eyes only; the session container owns media and Live.
+
+### Manual remote
+
+The application-scoped RemoteControl exposes StateFlow and is shared by settings and companionship. Activity recreation cannot create a second control loop; old pointerInput finally releases gestures and requests stop. Actual backgrounding closes the remote through normal app cleanup.
+
+Opening revokes previous motion permission and cancels scenarios/following. After old cleanup under scenarioLock, a real stop ACK is required before READY. AI/idle body commands and motion tests are paused; conversation may continue. Closing never automatically restores AI movement or following.
+
+States are INACTIVE → PREPARING → READY → FAILED / STOPPING. Epochs isolate late ACKs; one gesture ID rejects extra fingers and stale input. Release, leaving bounds, cancellation, mode changes, close and background all stop. Relative speed is 0.05–0.30, default 0.15; joystick dead zone is 12%, and combined linear/angular magnitude stays within the chosen limit. Leases are 400 ms with 60 ms ramp. After ACK, wait 100 ms before renewing with the latest input; do not queue history. Stop/motion confirmations have a 6 s bound; failure requests stop, while firmware leases bound unrenewed motion.
+
+D-pad and joystick handle raw release/cancel. TalkBack buttons/custom actions issue 200 ms pulses through the same ACK/stop logic. iOS KariRemoteControl / KariRemoteView provide behavioral reference without importing Swift sources. Physical speed, directions and stopping require hardware acceptance; ACK is not proof of mechanical stopping.

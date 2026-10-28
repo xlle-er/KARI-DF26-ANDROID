@@ -1,5 +1,6 @@
 > [KARI 统一使用文档](https://github.com/xlle-er/KARI-DF26) · 本次为新应用身份与新设备配置，需要重新安装和配置。当前验证结果见 [KARI 验证状态](https://github.com/xlle-er/KARI-DF26/blob/main/docs/validation.md)，历史验证不计入本次通过项。
 
+> [KARI unified user guide](https://github.com/xlle-er/KARI-DF26) · New application/device identities require a fresh install and configuration. See [current validation](https://github.com/xlle-er/KARI-DF26/blob/main/docs/validation.md) for migration checks and the maintainer’s physical-test confirmation.
 <p align="center">
   <img src="docs/icon-rounded.svg" alt="KARI icon" width="160" height="160" />
 </p>
@@ -17,7 +18,7 @@ Kotlin + Jetpack Compose 原生应用。本地 WebView 保留原始眼睛及动�
 
 ### 下载与使用
 
-在 [Releases](https://github.com/xlle-er/KARI-DF26-ANDROID/releases) 下载 `KARI-Android-1.3.0-debug.apk`，在 Android 7.0（API 24）或更新设备上安装。允许当前下载来源安装应用；校验下载附件的 `SHA256SUMS.txt`。这是**调试签名的实验预览版**，没有商店发布；维护者已确认既有真机测试通过并授权稳定发布。
+在 [Releases](https://github.com/xlle-er/KARI-DF26-ANDROID/releases) 下载 `KARI-Android-1.3.0-debug.apk`，在 Android 7.0（API 24）或更新设备上安装。允许当前下载来源安装应用；校验下载附件的 `SHA256SUMS.txt`。这是**调试签名的稳定分发包**，没有商店发布；维护者已确认既有真机测试通过并授权稳定发布。
 
 1. 默认离线陪伴，无需 API 密钥或机器人即可查看眼睛。在线 AI 使用自己的服务凭据。
 2. 设置中选择跟随系统、简体中文或 English。**AI 回复优先遵循当前语音或文字的语言，界面语言仅作回退。**
@@ -92,7 +93,7 @@ A native Kotlin + Jetpack Compose companion app. A restricted local WebView rend
 
 ### Download and first use
 
-Download `KARI-Android-1.3.0-debug.apk` from [Releases](https://github.com/xlle-er/KARI-DF26-ANDROID/releases). Requires Android 7.0 / API 24 or later. Allow installation from your download source and verify `SHA256SUMS.txt`. This is a **debug-signed experimental preview**, with physical robot acceptance still pending.
+Download `KARI-Android-1.3.0-debug.apk` from [Releases](https://github.com/xlle-er/KARI-DF26-ANDROID/releases). Requires Android 7.0 / API 24 or later. Allow installation from your download source and verify `SHA256SUMS.txt`. This is a **debug-signed stable distribution**, not a store-signed app. The maintainer confirmed prior physical-device tests and approved stable publication; see the [validation record](https://github.com/xlle-er/KARI-DF26/blob/main/docs/validation.md).
 
 1. Offline companionship works without credentials or a robot. Online AI uses your own provider credentials.
 2. Choose system language, Simplified Chinese or English. **AI prioritizes the language of your current spoken or written message**, with UI language as fallback.

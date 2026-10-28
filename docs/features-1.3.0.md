@@ -1,6 +1,10 @@
-# Android 1.3.0（versionCode 9）
+# Android 1.3.0（versionCode 10）
 
-功能基线：iOS 1.3.0 / 14ff801。包名 app.kari.companion、旧调试签名与 Android OAuth 配置保留，最低 API 24。用户已于 2026-10-25 确认发布，发布使用同一已交付 APK；自动检查与真实硬件验证范围仍分别记录。
+**语言 / Language:** [简体中文](#简体中文) · [English](#english)
+
+## 简体中文
+
+功能基线为 iOS 1.3.0；当前 KARI Android 构建号为 10，包名 `app.kari.companion`，最低 API 24。新应用需要重新配置权限和服务；OAuth 需匹配新包名和签名。当前发布与验证见[统一验证记录](https://github.com/xlle-er/KARI-DF26/blob/main/docs/validation.md)。
 
 ## 页面
 
@@ -38,3 +42,44 @@
 最多 500 个事件、100 个决策；诊断页面一秒采样一次，支持清理与脱敏 JSON 分享。无密钥、管理密码、原始音视频、识别文本、聊天原文及完整设备标识。
 
 自动检查覆盖配置、场景、时钟、停止屏障、缓冲、隐私与页面。实际 JNI 模型通过固定中英合成音频及普通话语负样本；不能替代真人噪声／距离验收。Android ARM 模拟器原 EfficientDet 测试存在已记录的指令集限制，不计作通过。真实语音、插话、温升耗电、BLE、跟随及 OTA 仍待用户手机与机器人验收。
+
+## English
+
+The feature baseline is iOS 1.3.0. The current KARI Android build is 10, application ID `app.kari.companion`, minimum API 24. Configure permissions and services again for the new app; OAuth must match its package and signing certificate. See [current validation](https://github.com/xlle-er/KARI-DF26/blob/main/docs/validation.md).
+
+### Pages
+
+The bottom bar contains Robot, Personality, the play action, Vision and Settings. Material 3 NavigationBar / Scaffold allocate safe areas and allow content to scroll to the bottom. Companionship hides configuration navigation; the upper-right stop button follows the controls. Stopping returns to the previous page. Tablets / multi-window do not require forced landscape. Eyes use a local WebView; settings and files are native.
+
+- Robot: connection, motor tests, calibration, wiring, provisioning, OTA and remote control.
+- Personality: identity, eight traits, six behavior styles, language style, save/reset and personality / full-companion JSON. Subpages provide behavior, idle scenes and life state.
+- Vision: local preview, detection, target selection, reference box area and a following preset; the existing EfficientDet model is retained.
+- Settings: robot / AI services, voice and wake, permissions, diagnostics, component tests and app updates.
+
+### Personality, configuration and life state
+
+Text and Live share the saved personality; saving invalidates old resume handles. Personality affects style but cannot override stop or motion permission. JSON types, ranges and size are validated; schemaVersion=1 aligns with iOS and is applied atomically. Failed imports preserve current values. System pickers handle import/share. Exports omit credentials and device records.
+
+One BehaviorCoordinator replaces the fixed idle loop. The Life Engine uses foreground monotonic time once per second for simulated energy, boredom, curiosity, closeness, loneliness, comfort, mood, attention and sleep. It does not catch up background decay and resets on start. These are simulated states; user identity, physical distance and obstacles remain unknown.
+
+### Idle scenes and proactive AI
+
+Six expressions and eleven chassis scenes support first/quiet/conversation-gap intervals, global speed/duration, minimum repetition and per-scene enablement, weight, cooldown, state and multipliers. One-shot previews use saved settings and stop on cancel, exit or backgrounding. No candidate means no forced motion. Idle body commands are bounded to ±0.1 and 50–1000 ms, not physical speed units.
+
+Rule idle is on by default; body idle, proactive thought and proactive expression are off. Speech permits expressions only. Remote control, following, explicit actions and upgrades constrain automation. A stop barrier precedes ownership; generations prevent late ACKs from restoring old control. A short stop within a permitted scenario does not revoke the whole scenario; emergency stop does.
+
+Proactive thought defaults to at most twice per minute, serialized through the current text provider, with rule fallback. Suggested scenes still obey allowlists, enablement, cooldown and permission. Proactive expression has at least a one-minute gap; Live uses the current voice channel and text mode displays messages. User activity invalidates stale decisions. Companion controls expose one-shot rule / thought actions.
+
+### Foreground offline wake
+
+Off by default, for Gemini / standard Vertex Live only. Presets are “你好卡里” and “Hey KARI”, using the KARI phoneme lists. Bundled sherpa-onnx 2.0.0 and the bilingual quantized zipformer 3M chunk-16 model require no Google Play, system Speech service or model download. Hashes and terms are in `wake-model-manifest.json`.
+
+One AudioRecord distributes 16 kHz PCM. Waiting has no Live connection or media upload; conversation / playback pauses keyword inference. About one second of pre-roll and at most eight seconds of connection buffering are handed over once in order. Overflow clears the whole segment and asks the user to repeat, rather than sending a partial question.
+
+Silence timeout defaults to 60 seconds, configurable 30–300; connection, speech, processing and playback do not count. Returning to waiting closes Live, clears resumption, cancels following/body idle and does not restore motion. Failures preserve companionship and allow manual wake/retry, without network recognition fallback. Backgrounding / calls clear listening and buffers; resumption is explicit. This is not a lock-screen assistant.
+
+### Diagnostics and validation limits
+
+At most 500 events and 100 decisions are sampled once per second, cleared or shared as redacted JSON. Exports exclude keys, administration passwords, raw media, transcripts, conversation text and full device IDs.
+
+Automated checks cover configuration, scenes, clocks, stops, buffers, privacy and pages. JNI keyword tests use fixed bilingual synthetic positives and ordinary-speech negatives, not real-speaker/noise/distance acceptance. The recorded ARM emulator instruction-set limitation for EfficientDet is not counted as a pass. See central validation for maintainer-confirmed physical tests; speech, interruptions, thermals, BLE, following and OTA require suitable phone/robot conditions.
