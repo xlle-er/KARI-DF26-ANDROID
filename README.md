@@ -65,7 +65,7 @@ python3 scripts/check-artifacts.py
 ./gradlew :app:connectedDebugAndroidTest
 ```
 
-`KARI_CHROME_PATH` 可指定已有 Chrome。macOS ARM64 可选用 `scripts/bootstrap-sdk.py`，脚本使用 `JAVA_HOME` 并会请求接受 Android SDK 条款；也可使用 Android Studio SDK Manager。图标来自根目录 `icon.png`，可用 `python3 scripts/build-icons.py` 重建（需 Pillow）。
+`KARI_CHROME_PATH` 可指定已有 Chrome。macOS ARM64 可选用 `scripts/bootstrap-sdk.py`，脚本使用 `JAVA_HOME` 并会请求接受 Android SDK 条款；也可使用 Android Studio SDK Manager。图标源文件保存在 `branding/AppIcon.icon`，兼容 PNG 为根目录 `icon.png`，桌面圆角及安全留白前景位于 `branding/`，可用 `python3 scripts/build-icons.py` 重建（需 Pillow）。
 
 ### 服务配置与隐私
 
@@ -129,7 +129,7 @@ Install JDK 21, Android SDK Platform 36 and Build Tools 36.0.0. Set `JAVA_HOME` 
 
 Output: `app/build/outputs/apk/debug/app-debug.apk`. Bundled face resources are committed, so normal APK builds need no Node. To regenerate them, run `npm ci` and `npm run build:resources`. For browser checks run `npx playwright install chromium` and `npm run test:face`; `KARI_CHROME_PATH` selects an existing Chrome installation. With an attached test device, run `./gradlew :app:connectedDebugAndroidTest`. Validate asset hashes using `python3 scripts/check-artifacts.py`.
 
-The optional macOS ARM64 SDK bootstrap script uses `JAVA_HOME` and asks you to accept Android SDK terms. Regenerate launcher icons from the supplied `icon.png` with `python3 scripts/build-icons.py` (Pillow required).
+The optional macOS ARM64 SDK bootstrap script uses `JAVA_HOME` and asks you to accept Android SDK terms. The approved sources are in `branding/AppIcon.icon`; the root `icon.png` is an opaque compatibility export. Regenerate rounded legacy and padded adaptive launcher icons from `branding/` with `python3 scripts/build-icons.py` (Pillow required).
 
 For Vertex authorization, register your own Android OAuth client for `app.kari.companion` and the installed signing SHA-1 (`./gradlew :app:signingReport`); enable the API and account permissions. Do not reuse an iOS client ID. Manual short-lived access tokens are supported on devices without Play services.
 

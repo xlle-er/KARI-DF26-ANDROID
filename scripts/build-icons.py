@@ -3,7 +3,7 @@
 from pathlib import Path
 from PIL import Image
 root=Path(__file__).resolve().parents[1]
-image=Image.open(root/'icon.png').convert('RGBA')
+image=Image.open(root/'branding/icon-rounded.png').convert('RGBA')
 foreground=Image.open(root/'branding/launcher-foreground.png').convert('RGBA')
 res=root/'app/src/main/res'
 for density,factor in [('mdpi',1),('hdpi',1.5),('xhdpi',2),('xxhdpi',3),('xxxhdpi',4)]:
